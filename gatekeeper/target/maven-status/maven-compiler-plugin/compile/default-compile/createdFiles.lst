@@ -1,0 +1,3 @@
+rb/web/pong/gatekeeper/controller/GatekeeperController.class
+rb/web/pong/gatekeeper/App.class
+rb/web/pong/gatekeeper/ServiceNotFoundException.class
