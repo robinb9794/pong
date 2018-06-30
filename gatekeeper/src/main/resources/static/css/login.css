@@ -29,7 +29,7 @@ input[type=text], select{
 }
 
 button{
-	float: left; 
+	float: right; 
 	color: black; 
 	background-color: #FFF;
 	border: 1px solid black;
