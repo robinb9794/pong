@@ -11,7 +11,8 @@ public class Config implements WebSocketConfigurer{
 
 	@Override
 	public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-		registry.addHandler(new WaitingRoom(), "/pong/waitingroom");
+		registry.addHandler(new SystemWaitingRoom(), "/pong/waitingroom/system");
+		registry.addHandler(new IndividualWaitingRoom(), "/pong/waitingroom/individual");
 	}
 	
 }

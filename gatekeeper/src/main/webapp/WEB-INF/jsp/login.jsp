@@ -49,7 +49,7 @@
 		}
 		
 		function toLobby(){
-			window.location.href = '/pong/lobby/' + document.getElementById('nickname').value;
+			window.location.href = '/pong/lobby/' + document.getElementById('nickname').value + '/' + document.getElementById('racket').value;
 		}
 	</script>
 </html>
