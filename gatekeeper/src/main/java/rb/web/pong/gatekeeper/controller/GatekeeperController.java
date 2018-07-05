@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import rb.web.pong.gatekeeper.ServiceNotFoundException;
-import rb.web.pong.gatekeeper.models.Player;
-import rb.web.pong.gatekeeper.models.Recorder;
+import rb.web.pong.gatekeeper.model.Player;
+import rb.web.pong.gatekeeper.model.Recorder;
 
 @Controller
 @RequestMapping(value="/pong")
