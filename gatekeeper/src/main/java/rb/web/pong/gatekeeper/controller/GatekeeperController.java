@@ -45,8 +45,8 @@ public class GatekeeperController {
 		return new ResponseEntity<List<Player>>(stats, HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "/lobby/{name}/{racket}", method = RequestMethod.GET)
-	public ModelAndView toLobby(@PathVariable("name") String name, @PathVariable("racket") String racket) {
+	@RequestMapping(value = "/lobby/{racket}/{name}", method = RequestMethod.GET)
+	public ModelAndView toLobby(@PathVariable("racket") String racket, @PathVariable("name") String name) {
 		Recorder.LOG.debug("MOVING TO WAITING ROOM");
 		ModelAndView mv = new ModelAndView("waitingroom");
 		mv.addObject("name", name);

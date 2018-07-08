@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Implementation-Title: eureka
+Implementation-Version: 1.0
+Built-By: Robin
+Implementation-Vendor-Id: rb.web.pong
+Build-Jdk: 1.8.0_172
+Implementation-URL: http://maven.apache.org
+Created-By: Maven Integration for Eclipse
+

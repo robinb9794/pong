@@ -1,7 +1,13 @@
-rb/web/pong/gatekeeper/waitingroom/WaitingRoom.class
+rb/web/pong/gatekeeper/waitingroom/IndividualCorner.class
 rb/web/pong/gatekeeper/controller/GatekeeperController.class
-rb/web/pong/gatekeeper/model/JsonMessage.class
+rb/web/pong/gatekeeper/waitingroom/WaitingRoom.class
 rb/web/pong/gatekeeper/ServiceNotFoundException.class
-rb/web/pong/gatekeeper/model/Player.class
 rb/web/pong/gatekeeper/model/Recorder.class
+rb/web/pong/gatekeeper/waitingroom/SystemCorner.class
+rb/web/pong/gatekeeper/waitingroom/WaitingRoom$1.class
+rb/web/pong/gatekeeper/model/Player.class
+rb/web/pong/gatekeeper/waitingroom/IMessageHandling.class
+rb/web/pong/gatekeeper/waitingroom/WaitingRoom$Referee.class
+rb/web/pong/gatekeeper/waitingroom/ISocket.class
 rb/web/pong/gatekeeper/App.class
+rb/web/pong/gatekeeper/model/MessageType.class
