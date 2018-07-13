@@ -14,7 +14,7 @@ import rb.web.pong.gatekeeper.model.Player;
 import rb.web.pong.gatekeeper.model.Recorder;
 
 public class SystemCorner extends WaitingRoom implements ISocket{
-	protected static Set<Player> waitingPlayers = new HashSet<Player>();
+	private static Set<Player> waitingPlayers = new HashSet<Player>();
 	
 	@OnOpen
 	@Override
@@ -25,7 +25,7 @@ public class SystemCorner extends WaitingRoom implements ISocket{
 		waitingPlayers.add(new Player(name, racket, session));		
 		addMessageHandler(session, waitingPlayers);		
 		if(waitingPlayers.size() == 2)
-			new Thread(new Referee(waitingPlayers)).start();
+			new Thread(new Supervisor(waitingPlayers)).start();
 	}
 	
 	@OnClose

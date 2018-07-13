@@ -56,9 +56,13 @@
 		var json = JSON.parse(serverMessage.data);
 		var waitingPlayers = json.waitingPlayers;
 		console.log(json);
-		updateOutput(json);
-		updateLobbyInfo(json.waitingPlayers);
-		updateCountdown(json);
+		if(json.type == 'LOBBY')
+			goToGameHall(json.message);
+		else{
+			updateOutput(json);
+			updateLobbyInfo(json.waitingPlayers);
+			updateCountdown(json);
+		}		
 	}
 	
 	function updateOutput(json){
@@ -90,10 +94,16 @@
 	}
 	
 	function updateCountdown(json){
-		if(json.type == 'COUNTDOWN')
+		if(json.type == 'COUNTDOWN'){
 			countdown.innerHTML = json.message;
-		else
+			if(json.message == '0')
+				goToGameHall();
+		}else
 			countdown.innerHTML = '';
+	}
+	
+	function goToGameHall(lobbyId){
+		window.location.href = 'http://localhost:8081/pong/gamehall/' + lobbyId + '/${name}';
 	}
 </script>
 

@@ -2,10 +2,17 @@ package rb.web.pong.gatekeeper.model;
 
 import javax.websocket.Session;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Player {
+	@JsonProperty
 	private String name;
+	@JsonProperty
 	private String racket;
+	@JsonProperty
 	private int score;
+	@JsonIgnore
 	private Session session;
 
 	
@@ -19,12 +26,10 @@ public class Player {
 	public String getName() {
 		return this.name;
 	}
-	
-	
+
 	public String getRacket() {
 		return this.racket;
 	}
-	
 	
 	public int getScore() {
 		return this.score;

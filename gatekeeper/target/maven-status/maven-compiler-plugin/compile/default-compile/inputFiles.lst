@@ -3,6 +3,7 @@
 /mnt/d/reps/pong/gatekeeper/src/main/java/rb/web/pong/gatekeeper/waitingroom/IMessageHandling.java
 /mnt/d/reps/pong/gatekeeper/src/main/java/rb/web/pong/gatekeeper/controller/GatekeeperController.java
 /mnt/d/reps/pong/gatekeeper/src/main/java/rb/web/pong/gatekeeper/waitingroom/SystemCorner.java
+/mnt/d/reps/pong/gatekeeper/src/main/java/rb/web/pong/gatekeeper/model/Lobby.java
 /mnt/d/reps/pong/gatekeeper/src/main/java/rb/web/pong/gatekeeper/model/Recorder.java
 /mnt/d/reps/pong/gatekeeper/src/main/java/rb/web/pong/gatekeeper/ServiceNotFoundException.java
 /mnt/d/reps/pong/gatekeeper/src/main/java/rb/web/pong/gatekeeper/model/MessageType.java
