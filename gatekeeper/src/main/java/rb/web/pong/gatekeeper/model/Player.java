@@ -10,8 +10,6 @@ public class Player {
 	private String name;
 	@JsonProperty
 	private String racket;
-	@JsonProperty
-	private int score;
 	@JsonIgnore
 	private Session session;
 
@@ -20,7 +18,6 @@ public class Player {
 		this.name = name;
 		this.racket = racket;
 		this.session = session;
-		this.score = 0;
 	}
 	
 	public String getName() {
@@ -29,14 +26,6 @@ public class Player {
 
 	public String getRacket() {
 		return this.racket;
-	}
-	
-	public int getScore() {
-		return this.score;
-	}
-	
-	public void incrScore() {
-		this.score++;
 	}
 	
 	public Session getSession() {

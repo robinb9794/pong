@@ -56,8 +56,8 @@
 		var json = JSON.parse(serverMessage.data);
 		var waitingPlayers = json.waitingPlayers;
 		console.log(json);
-		if(json.type == 'LOBBY')
-			goToGameHall(json.message);
+		if(json.type == 'HALL')
+			goToGameHall(json.message, waitingPlayers.length);
 		else{
 			updateOutput(json);
 			updateLobbyInfo(json.waitingPlayers);
@@ -96,14 +96,13 @@
 	function updateCountdown(json){
 		if(json.type == 'COUNTDOWN'){
 			countdown.innerHTML = json.message;
-			if(json.message == '0')
-				goToGameHall();
 		}else
 			countdown.innerHTML = '';
 	}
 	
-	function goToGameHall(lobbyId){
-		window.location.href = 'http://localhost:8081/pong/gamehall/' + lobbyId + '/${name}';
+	function goToGameHall(hallId, numberOfRegisteredPlayers){
+		socket.close();
+		window.location.href = 'http://localhost:8081/pong/sportshall/' + hallId + '/' + numberOfRegisteredPlayers + '/${racket}/${name}';
 	}
 </script>
 

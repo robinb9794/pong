@@ -31,7 +31,7 @@ public class IndividualCorner extends WaitingRoom implements ISocket{
 	@OnClose
 	@Override
 	public void onClose(Session session, CloseReason closeReason) {
-		Player disconnectedPlayer = getPlayerFromSession(session, waitingPlayers);
+		Player disconnectedPlayer = getPlayerBySession(session, waitingPlayers);
 		Recorder.LOG.debug(disconnectedPlayer.getName() + " LEFT THE INDIVIDUAL CORNER");
 		removePlayer(session, waitingPlayers);
 		sendToPlayers(MessageType.valueOf("DISCONNECTED"), disconnectedPlayer.getName() + " has left the party!", waitingPlayers);

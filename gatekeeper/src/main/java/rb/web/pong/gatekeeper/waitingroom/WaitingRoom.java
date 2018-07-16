@@ -12,13 +12,13 @@ import javax.websocket.Session;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import rb.web.pong.gatekeeper.model.Lobby;
+import rb.web.pong.gatekeeper.model.Hall;
 import rb.web.pong.gatekeeper.model.MessageType;
 import rb.web.pong.gatekeeper.model.Player;
 import rb.web.pong.gatekeeper.model.Recorder;
 
 public abstract class WaitingRoom extends Endpoint implements IMessageHandling{
-	protected static List<Lobby> createdLobbies = new ArrayList<Lobby>();
+	protected static List<Hall> createdLobbies = new ArrayList<Hall>();
 	
 	@Override
 	public synchronized void addMessageHandler(Session session, Set<Player> waitingPlayers) {
@@ -37,7 +37,7 @@ public abstract class WaitingRoom extends Endpoint implements IMessageHandling{
 	@Override
 	public synchronized void handleMessage(String message, Session session, Set<Player> waitingPlayers) {
 		Recorder.LOG.debug("RECEIVED MESSAGE FROM CLIENT: " + message);
-		Player playerOfSentMessage = getPlayerFromSession(session, waitingPlayers);
+		Player playerOfSentMessage = getPlayerBySession(session, waitingPlayers);
 		sendToPlayers(MessageType.valueOf("CONNECTED"), playerOfSentMessage.getName() + " has joined the party!", waitingPlayers);
 	}
 	
@@ -46,14 +46,15 @@ public abstract class WaitingRoom extends Endpoint implements IMessageHandling{
 		JSONObject objectToBeSend = createJson(type, message, playersWithSameRacket);
 		Recorder.LOG.debug("SENDING MESSAGE TO CLIENTS: " + objectToBeSend.toString());
 		for(Player p : playersWithSameRacket) {
-			if(p.getSession().isOpen()) {
+			if(p.getSession().isOpen())
 				p.getSession().getAsyncRemote().sendText(objectToBeSend.toString());
-			}
+			else
+				playersWithSameRacket.remove(p);
 		}
 	}	
 	
 	@Override
-	public synchronized Player getPlayerFromSession(Session session, Set<Player> waitingPlayers) {
+	public synchronized Player getPlayerBySession(Session session, Set<Player> waitingPlayers) {
 		for(Player p : waitingPlayers) {
 			if(p.getSession().equals(session)) {
 				return p;
@@ -93,10 +94,6 @@ public abstract class WaitingRoom extends Endpoint implements IMessageHandling{
 		return array;
 	}
 	
-	public static Lobby getCreatedLobbyByID(int i){
-		return createdLobbies.get(i);
-	}
-	
 	protected class Supervisor implements Runnable{	
 		private Set<Player> waitingPlayers;
 		private int countdown;
@@ -114,40 +111,33 @@ public abstract class WaitingRoom extends Endpoint implements IMessageHandling{
 					Thread.sleep(1000);
 					sendToPlayers(MessageType.valueOf("COUNTDOWN"), Integer.toString(countdown), waitingPlayers);
 					if(countdown == 0) {
-						createLobbiesAndSendInfoToPlayers();		
+						openHallsAndSendInfoToPlayers();		
 					}						
 					countdown--;
 				}
 				if(createdLobbies.size() == 0)
 					sendToPlayers(MessageType.valueOf("INFO"), "New matchmaking in the progress...", waitingPlayers);
-				else
-					removeWaitingPlayers();
 			}catch(Exception e) {
 				Recorder.LOG.error(e.toString());
 			}
 		}	
 		
-		private synchronized void createLobbiesAndSendInfoToPlayers() {
+		private synchronized void openHallsAndSendInfoToPlayers() {
 			int id = 0;
 			Iterator<Player> iterator = waitingPlayers.iterator();
 			for(int i = 0; i < waitingPlayers.size(); i += 4) {
-				Lobby lobby = new Lobby(id);				
+				Hall hall = new Hall(id);				
 				for(int j = 0; j < 4 && iterator.hasNext(); j++) {
 					try {
-						Recorder.LOG.debug("BRINGING PLAYER TO LOBBY " + (id));
-						lobby.addPlayer(iterator.next());
+						Recorder.LOG.debug("BRINGING PLAYER TO HALL " + (id));
+						hall.addPlayer(iterator.next());
 					}catch(Exception e) {
-						Recorder.LOG.debug("CREATED LOBBIES");
+						Recorder.LOG.debug("CREATED HALLS");
 					}
 				}
-				createdLobbies.add(lobby);
-				sendToPlayers(MessageType.valueOf("LOBBY"), Integer.toString(id++), lobby.getRegisteredPlayers());
+				createdLobbies.add(hall);
+				sendToPlayers(MessageType.valueOf("HALL"), Integer.toString(id++), hall.getRegisteredPlayers());
 			}
-		}
-		
-		private synchronized void removeWaitingPlayers() {
-			for(Player p : waitingPlayers)
-				waitingPlayers.remove(p);
 		}
 	}
 }
