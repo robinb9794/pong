@@ -17,7 +17,7 @@ import rb.web.pong.gatekeeper.model.MessageType;
 import rb.web.pong.gatekeeper.model.Player;
 import rb.web.pong.gatekeeper.model.Recorder;
 
-public abstract class WaitingRoom extends Endpoint implements IMessageHandling{
+public abstract class WaitingRoom extends Endpoint implements IMessageHandler{
 	protected static List<Hall> createdLobbies = new ArrayList<Hall>();
 	
 	@Override
@@ -26,7 +26,7 @@ public abstract class WaitingRoom extends Endpoint implements IMessageHandling{
 			@Override
 			public void onMessage(String message) {
 				try {
-					handleMessage(message, session, waitingPlayers);
+					handleReceivedMessage(message, session, waitingPlayers);
 				}catch(Exception e) {
 					e.printStackTrace();
 				}
@@ -35,15 +35,25 @@ public abstract class WaitingRoom extends Endpoint implements IMessageHandling{
 	}
 	
 	@Override
-	public synchronized void handleMessage(String message, Session session, Set<Player> waitingPlayers) {
+	public synchronized void handleReceivedMessage(String message, Session session, Set<Player> waitingPlayers) {
 		Recorder.LOG.debug("RECEIVED MESSAGE FROM CLIENT: " + message);
 		Player playerOfSentMessage = getPlayerBySession(session, waitingPlayers);
 		sendToPlayers(MessageType.valueOf("CONNECTED"), playerOfSentMessage.getName() + " has joined the party!", waitingPlayers);
 	}
 	
 	@Override
+	public synchronized Player getPlayerBySession(Session session, Set<Player> waitingPlayers) {
+		for(Player p : waitingPlayers) {
+			if(p.getSession().getId().equals(session.getId())) {
+				return p;
+			}
+		}
+		return null;
+	}
+	
+	@Override
 	public synchronized void sendToPlayers(MessageType type, String message, Set<Player> playersWithSameRacket) {
-		JSONObject objectToBeSend = createJson(type, message, playersWithSameRacket);
+		JSONObject objectToBeSend = getJson(type, message, playersWithSameRacket);
 		Recorder.LOG.debug("SENDING MESSAGE TO CLIENTS: " + objectToBeSend.toString());
 		for(Player p : playersWithSameRacket) {
 			if(p.getSession().isOpen())
@@ -54,23 +64,25 @@ public abstract class WaitingRoom extends Endpoint implements IMessageHandling{
 	}	
 	
 	@Override
-	public synchronized Player getPlayerBySession(Session session, Set<Player> waitingPlayers) {
-		for(Player p : waitingPlayers) {
-			if(p.getSession().equals(session)) {
-				return p;
-			}
-		}
-		return null;
+	public synchronized JSONObject getJson(MessageType type, String message, Set<Player> waitingPlayers) {
+		JSONObject jsonObj = new JSONObject();
+		jsonObj.put("type", type.toString());
+		jsonObj.put("message", message);		
+		jsonObj.put("waitingPlayers", getPlayerInfoAsJsonArray(waitingPlayers));
+		return jsonObj;
 	}	
 	
 	@Override
-	public synchronized JSONObject createJson(MessageType type, String message, Set<Player> waitingPlayers) {
-		JSONObject json = new JSONObject();
-		json.put("type", type.toString());
-		json.put("message", message);		
-		json.put("waitingPlayers", convertSetToJsonArray(waitingPlayers));
-		return json;
-	}	
+	public synchronized JSONArray getPlayerInfoAsJsonArray(Set<Player> players) {
+		JSONArray playerArr = new JSONArray();
+		for(Player p : players) {
+			JSONObject playerObj = new JSONObject();
+			playerObj.put("name", p.getName());
+			playerObj.put("racket", p.getRacket());
+			playerArr.put(playerObj);
+		}
+		return playerArr;
+	}
 	
 	@Override
 	public synchronized void removePlayer(Session session, Set<Player> waitingPlayers) {
@@ -80,18 +92,6 @@ public abstract class WaitingRoom extends Endpoint implements IMessageHandling{
 				break;
 			}
 		}
-	}
-	
-	@Override
-	public synchronized JSONArray convertSetToJsonArray(Set<Player> players) {
-		JSONArray array = new JSONArray();
-		for(Player p : players) {
-			JSONObject obj = new JSONObject();
-			obj.put("name", p.getName());
-			obj.put("racket", p.getRacket());
-			array.put(obj);
-		}
-		return array;
 	}
 	
 	protected class Supervisor implements Runnable{	

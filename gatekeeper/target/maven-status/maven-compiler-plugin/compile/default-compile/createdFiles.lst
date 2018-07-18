@@ -3,12 +3,12 @@ rb/web/pong/gatekeeper/controller/GatekeeperController.class
 rb/web/pong/gatekeeper/waitingroom/WaitingRoom.class
 rb/web/pong/gatekeeper/ServiceNotFoundException.class
 rb/web/pong/gatekeeper/model/Recorder.class
+rb/web/pong/gatekeeper/waitingroom/IMessageHandler.class
 rb/web/pong/gatekeeper/waitingroom/WaitingRoom$Supervisor.class
 rb/web/pong/gatekeeper/waitingroom/SystemCorner.class
+rb/web/pong/gatekeeper/waitingroom/ISocketHandler.class
 rb/web/pong/gatekeeper/waitingroom/WaitingRoom$1.class
 rb/web/pong/gatekeeper/model/Player.class
-rb/web/pong/gatekeeper/waitingroom/IMessageHandling.class
-rb/web/pong/gatekeeper/waitingroom/ISocket.class
 rb/web/pong/gatekeeper/App.class
 rb/web/pong/gatekeeper/model/MessageType.class
 rb/web/pong/gatekeeper/model/Hall.class

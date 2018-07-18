@@ -9,20 +9,20 @@
 </head>
 <body>
 	<div>
-		<canvas id="field" width="800" height="700"></canvas>
+		<canvas id="field"></canvas>
 	</div>
 </body>
 
 <script type="text/javascript">
 	var socket;
-	var canvas
+	var field;
 	var ctx;
 	
 	window.onload = function(){
 		socket = new WebSocket('ws://localhost:8081/pong/sportshall/hall/${hallId}/${numberOfRegisteredPlayers}');
 		initSocket();
-		canvas = document.getElementById('field');
-		ctx = canvas.getContext('2d');
+		field = document.getElementById('field');
+		ctx = field.getContext('2d');
 		ctx.fillStyle = '#FFF';		
 	}
 	
@@ -36,12 +36,51 @@
 		}
 		
 		socket.onmessage = function(serverMessage){
-			console.log(serverMessage);
+			var json = JSON.parse(serverMessage.data);
+			console.log(json);
+			handleServerMessage(json);
 		}
 		
 		socket.onerror = function(error){
 			console.log(error);
 		}
+	}
+	
+	function handleServerMessage(json){
+		switch(json.type){
+		case 'INIT':
+			handleInitMessage(json);
+			break;
+		}
+	}
+	
+	function handleInitMessage(json){
+		var serverField = json.field;
+		var ball = json.ball;
+		var players = json.players;
+		drawField(serverField);
+		drawBall(ball);
+		drawPlayers(players);
+	}
+	
+	function drawField(serverField){
+		field.width = serverField.width;
+		field.height = serverField.height;
+	}
+	
+	function drawBall(ball){
+		var x = ball.position.x;
+		var y = ball.position.y;
+		var size = ball.size;
+		ctx.beginPath();
+		ctx.arc(x, y, size, 0, 2*Math.PI);
+		ctx.fill();
+	}
+	
+	function drawPlayers(players){
+		var racket = players[0].racket;
+		ctx.rect(racket.x, racket.y, racket.x + racket.width, racket.y + racket.height);
+		ctx.fill();
 	}
 </script>
 </html>

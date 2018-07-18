@@ -9,26 +9,27 @@ import javax.websocket.EndpointConfig;
 import javax.websocket.MessageHandler;
 import javax.websocket.Session;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
+import rb.web.pong.gamehall.model.Ball;
 import rb.web.pong.gamehall.model.MessageType;
 import rb.web.pong.gamehall.model.Player;
 import rb.web.pong.gamehall.model.Recorder;
 
-public class Hall extends Endpoint{
-	private Set<Player> players = new HashSet<Player>();
-	private static int numberOfRegisteredPlayers;
-	private static int hallId;
+public class Hall extends Endpoint {
+	protected static Set<Player> players = new HashSet<Player>();
+	protected static Ball ball = new Ball();
+	protected static int numberOfRegisteredPlayers = -1;
+	protected static int hallId = -1;
 	
-	public Hall() {
-		Recorder.LOG.debug("JETZT");
-	}
+	private static InitMessageHandler initHandler = new InitMessageHandler();
 	
 	@Override
 	public synchronized void onOpen(Session session, EndpointConfig config) {
-		numberOfRegisteredPlayers = getNumberOfRegisteredPlayersFromSession(session);
-		hallId = getHallIdFromSession(session);
+		if(numberOfRegisteredPlayers == -1 && hallId == -1) {
+			numberOfRegisteredPlayers = getNumberOfRegisteredPlayersFromSession(session);
+			hallId = getHallIdFromSession(session);
+		}		
 		players.add(new Player(session));
 		addMessageHandler(session);
 	}
@@ -46,7 +47,7 @@ public class Hall extends Endpoint{
 			@Override
 			public void onMessage(String message) {
 				try {
-					handleMessage(message, session);
+					handleReceivedMessage(message, session);
 				}catch(Exception e) {
 					e.printStackTrace();
 				}
@@ -54,52 +55,36 @@ public class Hall extends Endpoint{
 		});
 	}
 
-    public synchronized void handleMessage(String message, Session session) {
-		Recorder.LOG.debug("RECEIVED MESSAGE FROM CLIENT: " + message);
+    private synchronized void handleReceivedMessage(String message, Session session) {
+		Recorder.LOG.debug(hallId + " ; RECEIVED MESSAGE FROM CLIENT: " + message);
 		Player playerOfSentMessage = getPlayerBySession(session);
 		JSONObject receivedJson = new JSONObject(message);
-	}
-    
-    private synchronized void sendToPlayers(JSONObject objectToBeSend) {
-		Recorder.LOG.debug("SENDING MESSAGE TO CLIENTS: " + objectToBeSend.toString());
-		for(Player p : players) {
-			if(p.getSession().isOpen()) {
-				p.getSession().getAsyncRemote().sendText(objectToBeSend.toString());
-			}
-		}
+		handleReceivedMessage(receivedJson, playerOfSentMessage);
 	}
     
     private synchronized Player getPlayerBySession(Session session) {
 		for(Player p : players) {
-			if(p.getSession().equals(session)) {
+			if(p.getSession().getId().equals(session.getId())) {
 				return p;
 			}
 		}
 		return null;
 	}
     
-    private synchronized JSONObject createJson(MessageType type) {
-		JSONObject json = new JSONObject();
-		json.put("type", type.toString());
-		json.put("players", convertPlayersToJsonArray());
-		return json;
-	}
+    private synchronized void handleReceivedMessage(JSONObject receivedJson, Player playerOfSentMessage) {
+    	MessageType typeValue = MessageType.valueOf(receivedJson.getString("type"));
+    	switch(typeValue) {
+    	case INIT:
+    		initHandler.handleMessage(receivedJson, playerOfSentMessage);
+    		break;
+    	}
+    }    
     
-    private synchronized JSONArray convertPlayersToJsonArray() {
-		JSONArray array = new JSONArray();
-		for(Player p : players) {
-			JSONObject obj = new JSONObject();
-			obj.put("name", p.getName());
-			obj.put("racket", p.getRacket());
-			array.put(obj);
-		}
-		return array;
-	}
     
     public synchronized void onClose(Session session, CloseReason closeReason) {
-		Recorder.LOG.debug("CLIENT HAS LEFT HALL");
 		for(Player p : players) {
 			if(p.getSession().equals(session)) {
+				Recorder.LOG.debug(hallId + " ; " + p.getName() + " HAS LEFT THE HALL");
 				players.remove(p);
 				break;
 			}
@@ -107,6 +92,6 @@ public class Hall extends Endpoint{
     }
 
     public synchronized void onError(Session session, Throwable throwable) {
-
+    	Recorder.LOG.error(throwable.getMessage());
     }
 }

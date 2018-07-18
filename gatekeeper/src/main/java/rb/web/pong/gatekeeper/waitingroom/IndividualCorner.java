@@ -13,7 +13,7 @@ import rb.web.pong.gatekeeper.model.MessageType;
 import rb.web.pong.gatekeeper.model.Player;
 import rb.web.pong.gatekeeper.model.Recorder;
 
-public class IndividualCorner extends WaitingRoom implements ISocket{
+public class IndividualCorner extends WaitingRoom implements ISocketHandler{
 	protected static Set<Player> waitingPlayers = new HashSet<Player>();
 	
 	@OnOpen
