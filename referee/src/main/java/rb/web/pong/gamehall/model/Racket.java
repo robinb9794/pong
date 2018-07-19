@@ -2,21 +2,17 @@ package rb.web.pong.gamehall.model;
 
 public class Racket {
 	private String type;
-	private Position position;
+	private Position startPos;
 	private final int WIDTH = Rules.RACKET_WIDTH;
 	private final int HEIGHT = Rules.RACKET_HEIGHT;
 	
-	public Racket(String type) {
+	public Racket(String type, Position startPos) {
 		this.type = type;
-		this.position = new Position();
+		this.startPos = startPos;
 	}
 	
-	public int getX() {
-		return this.position.getX();
-	}
-	
-	public int getY() {
-		return this.position.getY();
+	public Position getStartPos() {
+		return this.startPos;
 	}
 	
 	public int getWidth() {

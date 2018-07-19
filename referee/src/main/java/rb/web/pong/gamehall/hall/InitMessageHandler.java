@@ -3,6 +3,8 @@ package rb.web.pong.gamehall.hall;
 import org.json.JSONObject;
 
 import rb.web.pong.gamehall.model.Player;
+import rb.web.pong.gamehall.model.Position;
+import rb.web.pong.gamehall.model.Racket;
 import rb.web.pong.gamehall.model.Recorder;
 import rb.web.pong.gamehall.model.Rules;
 
@@ -17,11 +19,19 @@ public class InitMessageHandler extends MessageHandler {
 			createInitMessageForPlayers();
 	}
 	
-	private synchronized void initPlayer(Player playerOfSentMessage, String name, String racket) {
-    	playerOfSentMessage.setName(name);
+	private synchronized void initPlayer(Player playerOfSentMessage, String name, String racketType) {
+		Position startPos = getStartPos();
+		Racket racket = new Racket(racketType, startPos);
+    	playerOfSentMessage.setName(name);    	
     	playerOfSentMessage.setRacket(racket);
     	Recorder.LOG.debug(hallId + " ; INITIALIZED PLAYER: " + name);
     }
+	
+	private synchronized Position getStartPos() {
+		int x = Rules.CANVAS_WIDTH / 2 - Rules.RACKET_WIDTH / 2;
+		int y = Rules.CANVAS_HEIGHT - 3 * Rules.RACKET_HEIGHT;
+		return new Position(x, y);
+	}
     
 	private synchronized boolean canSendInitMessageToPlayers() {
     	return players.size() == numberOfRegisteredPlayers;

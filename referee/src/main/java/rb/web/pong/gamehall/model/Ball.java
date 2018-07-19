@@ -5,8 +5,8 @@ public class Ball {
 	private Position position;
 	
 	public Ball() {
-		int x = Rules.CANVAS_WIDTH / 2 - SIZE;
-		int y = Rules.CANVAS_HEIGHT / 2 - SIZE;
+		int x = Rules.CANVAS_WIDTH / 2;
+		int y = Rules.CANVAS_HEIGHT / 2;
 		position = new Position(x, y);
 	}
 	

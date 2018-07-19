@@ -5,12 +5,12 @@ import javax.websocket.Session;
 public class Player {
 	private String name;
 	private Racket racket;
-	private int score;
+	private int lifes;
 	private Session session;
 	
 	public Player(Session session) {
 		this.session = session;
-		this.score = 0;
+		this.lifes = 5;
 	}
 	
 	public String getName() {
@@ -25,16 +25,16 @@ public class Player {
 		return racket;
 	}
 	
-	public void setRacket(String type) {
-		this.racket = new Racket(type);
+	public void setRacket(Racket racket) {
+		this.racket = racket;
 	}
 	
-	public int getScore() {
-		return this.score;
+	public int getLifes() {
+		return this.lifes;
 	}
 	
-	public void incrScore() {
-		this.score++;
+	public void decrLife() {
+		this.lifes--;
 	}
 	
 	public Session getSession() {

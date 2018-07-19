@@ -22,13 +22,14 @@ public class Hall extends Endpoint {
 	protected static int numberOfRegisteredPlayers = -1;
 	protected static int hallId = -1;
 	
-	private static InitMessageHandler initHandler = new InitMessageHandler();
+	private static InitMessageHandler initHandler;
 	
 	@Override
 	public synchronized void onOpen(Session session, EndpointConfig config) {
 		if(numberOfRegisteredPlayers == -1 && hallId == -1) {
 			numberOfRegisteredPlayers = getNumberOfRegisteredPlayersFromSession(session);
 			hallId = getHallIdFromSession(session);
+			initHandler = new InitMessageHandler();
 		}		
 		players.add(new Player(session));
 		addMessageHandler(session);

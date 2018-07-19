@@ -33,7 +33,7 @@ abstract class MessageHandler extends Hall{
 		for(Player p : players) {
 			JSONObject playerObj = new JSONObject();
 			playerObj.put("name", p.getName());
-			playerObj.put("score", p.getScore());
+			playerObj.put("lifes", p.getLifes());
 			playerObj.put("racket", getRacketInfoFromPlayerAsJson(p));
 			array.put(playerObj);
 		}
@@ -43,11 +43,15 @@ abstract class MessageHandler extends Hall{
 	protected synchronized static JSONObject getRacketInfoFromPlayerAsJson(Player player) {
     	JSONObject racketObj = new JSONObject();
     	racketObj.put("width", player.getRacket().getWidth());
-    	racketObj.put("height",  player.getRacket().getHeight());
-    	JSONObject positionObj = new JSONObject();
-    	positionObj.put("x", player.getRacket().getX());
-    	positionObj.put("y", player.getRacket().getY());
-    	racketObj.put("position", positionObj);
+    	racketObj.put("height",  player.getRacket().getHeight());    	
+    	racketObj.put("startPos", getStartPosAsJson(player));    	
     	return racketObj;
     }   
+	
+	protected synchronized static JSONObject getStartPosAsJson(Player player) {
+		JSONObject startPosObj = new JSONObject();
+    	startPosObj.put("x", player.getRacket().getStartPos().getX());
+    	startPosObj.put("y", player.getRacket().getStartPos().getY());
+    	return startPosObj;
+	}
 }
