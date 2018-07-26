@@ -1,34 +1,42 @@
-function Ball(x, y, size){
-	this.x = x;
-	this.y = y;
+function Ball(coordinate, size){
+	this.coordinate = coordinate;
 	this.size = size;
 	
 	this.draw = function(){
 		ctx.beginPath();
-		ctx.arc(this.x, this.y, this.size, 0, 2*Math.PI);
+		ctx.fillStyle = '#FFF';
+		ctx.arc(this.coordinate.x, this.coordinate.y, this.size, 0, 2*Math.PI);
 		ctx.fill();
+		ctx.closePath();
 	}
 }
 
-function Player(name, lifes, racket){
+function Player(name, lifes, color, position, racket){
 	this.name = name;
 	this.lifes = lifes;
+	this.color = color;
+	this.position = position;
 	this.racket = racket;
 	
 	this.draw = function(){
-		console.log(racket);
-		ctx.rect(this.racket.startPos.x, this.racket.startPos.y, this.racket.width, this.racket.height);
+		ctx.beginPath();
+		ctx.translate(0, 0);
+		ctx.fillStyle = color;
+		ctx.rect(this.racket.coordinate.x, this.racket.coordinate.y, this.racket.width, this.racket.height);
 		ctx.fill();
+		ctx.closePath();
 	}
+	
+	
 }
 
-function Racket(startPos, width, height){
-	this.startPos = startPos;
+function Racket(coordinate, width, height){
+	this.coordinate = coordinate;
 	this.width = width;
 	this.height = height;
 }
 
-function Position(x, y){
+function Coordinate(x, y){
 	this.x = x;
 	this.y = y;
 }

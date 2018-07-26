@@ -24,7 +24,7 @@ public class SystemCorner extends WaitingRoom implements ISocketHandler{
 		Recorder.LOG.debug("CLIENT ENTERED THE SYSTEM CORNER: " + name + ", " + racket);
 		waitingPlayers.add(new Player(name, racket, session));		
 		addMessageHandler(session, waitingPlayers);		
-		if(waitingPlayers.size() == 2)
+		if(waitingPlayers.size() % 2 == 0)
 			new Thread(new Supervisor(waitingPlayers)).start();
 	}
 	

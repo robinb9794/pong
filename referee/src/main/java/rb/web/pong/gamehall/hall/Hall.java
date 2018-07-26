@@ -11,6 +11,8 @@ import javax.websocket.Session;
 
 import org.json.JSONObject;
 
+import rb.web.pong.gamehall.hall.handler.message.InitMessageHandler;
+import rb.web.pong.gamehall.hall.handler.message.UpdateMessageHandler;
 import rb.web.pong.gamehall.model.Ball;
 import rb.web.pong.gamehall.model.MessageType;
 import rb.web.pong.gamehall.model.Player;
@@ -19,17 +21,20 @@ import rb.web.pong.gamehall.model.Recorder;
 public class Hall extends Endpoint {
 	protected static Set<Player> players = new HashSet<Player>();
 	protected static Ball ball = new Ball();
-	protected static int numberOfRegisteredPlayers = -1;
+	protected static int registeredPlayers = -1;
+	protected static int initializedPlayers = 0;
 	protected static int hallId = -1;
 	
-	private static InitMessageHandler initHandler;
+	protected static InitMessageHandler initHandler;
+	protected static UpdateMessageHandler updateHandler;
 	
 	@Override
 	public synchronized void onOpen(Session session, EndpointConfig config) {
-		if(numberOfRegisteredPlayers == -1 && hallId == -1) {
-			numberOfRegisteredPlayers = getNumberOfRegisteredPlayersFromSession(session);
+		if(registeredPlayers == -1 && hallId == -1) {
+			registeredPlayers = getNumberOfRegisteredPlayersFromSession(session);
 			hallId = getHallIdFromSession(session);
 			initHandler = new InitMessageHandler();
+			updateHandler = new UpdateMessageHandler();
 		}		
 		players.add(new Player(session));
 		addMessageHandler(session);
@@ -72,11 +77,15 @@ public class Hall extends Endpoint {
 		return null;
 	}
     
-    private synchronized void handleReceivedMessage(JSONObject receivedJson, Player playerOfSentMessage) {
-    	MessageType typeValue = MessageType.valueOf(receivedJson.getString("type"));
-    	switch(typeValue) {
+    @SuppressWarnings("incomplete-switch")
+	private synchronized void handleReceivedMessage(JSONObject receivedJson, Player playerOfSentMessage) {
+    	MessageType messageType = MessageType.valueOf(receivedJson.getString("type"));
+    	switch(messageType) {
     	case INIT:
     		initHandler.handleMessage(receivedJson, playerOfSentMessage);
+    		break;
+    	case UPDATE:
+    		updateHandler.handleMessage(receivedJson, playerOfSentMessage);
     		break;
     	}
     }    

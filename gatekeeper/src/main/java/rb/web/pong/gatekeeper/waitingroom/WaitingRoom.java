@@ -100,14 +100,14 @@ public abstract class WaitingRoom extends Endpoint implements IMessageHandler{
 		
 		public Supervisor(Set<Player> waitingPlayers) {
 			this.waitingPlayers = waitingPlayers;
-			countdown = 30;
+			countdown = 20;
 			String message = "Enough players present. The match is about to start. Prepare yourselves!";
 			sendToPlayers(MessageType.valueOf("INFO"), message, waitingPlayers);
 		}
 		@Override
 		public void run() {
 			try {
-				while(waitingPlayers.size() > 1 && countdown >= 0) {
+				while(waitingPlayers.size() % 2 == 0 && countdown >= 0) {
 					Thread.sleep(1000);
 					sendToPlayers(MessageType.valueOf("COUNTDOWN"), Integer.toString(countdown), waitingPlayers);
 					if(countdown == 0) {

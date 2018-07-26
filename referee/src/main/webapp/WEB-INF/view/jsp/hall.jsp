@@ -8,43 +8,65 @@
 	<link href="/css/hall.css" type="text/css" rel="stylesheet" />
 </head>
 <body>
-	<div>
-		<canvas id="canvas"></canvas>
+	<canvas id="canvas"></canvas>
+	<div id="info">
+		<table id="table">
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>Lifes</th>
+					<th>Position</th>
+				</tr>
+			</thead>
+			<tbody id="table-body"></tbody>				
+		</table>
 	</div>
+	<div id="log"></div>
 </body>
 
 <script src="/js/objects.js" type="text/javascript"></script>
+<script src="/js/init.js" type="text/javascript"></script>
+<script src="/js/countdown.js" type="text/javascript"></script>
+<script src="/js/update.js" type="text/javascript"></script>
 <script type="text/javascript">
 	var socket;
 	var canvas;
 	var ctx;
+	var self = {};
 	var ball;
 	var players = [];
+	var log;
+	
+	var countdownExpired = false;
 	
 	window.onload = function(){
 		socket = new WebSocket('ws://localhost:8081/pong/sportshall/hall/${hallId}/${numberOfRegisteredPlayers}');
+		self.name = '${name}';
+		self.racket = '${racket}';
 		initSocket();	
 		canvas = document.getElementById('canvas');	
+		log = document.getElementById('log');
 	}
 	
-	function initSocket(){
-		socket.onopen = function(){
-			socket.send(JSON.stringify({
-				type: 'INIT',
-				name: '${name}',
-				racket: '${racket}'
-			}));
+	document.body.onkeydown = function(event){
+		let keyCode = event.keyCode;
+		var direction = '';
+		switch(keyCode){
+		case 87:
+			direction = 'UP';
+			break;
+		case 68:
+			direction = 'RIGHT';
+			break;
+		case 83:
+			direction = 'DOWN';
+			break;
+		case 65:
+			direction = 'LEFT';
+			break;
 		}
-		
-		socket.onmessage = function(serverMessage){
-			var json = JSON.parse(serverMessage.data);
-			console.log(json);
-			handleServerMessage(json);
-		}
-		
-		socket.onerror = function(error){
-			console.log(error);
-		}
+		if(direction != '' && countdownExpired && directionIsCorrect(direction))
+			sendToServer('UPDATE', direction);
 	}
 	
 	function handleServerMessage(json){
@@ -52,58 +74,51 @@
 		case 'INIT':
 			handleInitMessage(json);
 			break;
+		case 'COUNTDOWN':
+			handleCountdownMessage(json);
+			break;
+		case 'UPDATE':
+			handleUpdateMessage(json);
+			break;
 		}
 	}
 	
-	function handleInitMessage(json){	
-		let initObjects = () => {
-			initField(json.field);
-			initBall(json.ball);
-			initPlayers(json.players);
-			drawObjects();
-		}		
-		initObjects();
-	}
-	
-	function initField(serverField){
-		canvas.width = serverField.width;
-		canvas.height = serverField.height;
-		ctx = canvas.getContext('2d');		
-		ctx.fillStyle = '#FFF';
-	}
-	
-	function initBall(serverBall){
-		var x = serverBall.position.x;
-		var y = serverBall.position.y;
-		var size = serverBall.size;
-		ball = new Ball(x, y, size);
-	}
-	
-	function initPlayers(serverPlayers){
-		for(var i = 0; i < serverPlayers.length; i++){
-			var startPosX = serverPlayers[i].racket.startPos.x;
-			var startPosY = serverPlayers[i].racket.startPos.y;
-			
-			var startPos = new Position(startPosX, startPosY);
-			var width = serverPlayers[i].racket.width;
-			var height = serverPlayers[i].racket.height;
-			
-			var racket = new Racket(startPos, width, height);
-			
-			var name = serverPlayers[i].name;
-			var lifes = serverPlayers[i].lifes;
-			
-			var player = new Player(name, lifes, racket);
-			
-			players.push(player);
+	function directionIsCorrect(direction){
+		if(selfIsHorizontal()){
+			if(direction == 'LEFT' || direction == 'RIGHT')
+				return true;
+		}else if(selfIsVertical()){
+			if(direction == 'UP' || direction == 'DOWN')
+				return true;
 		}
+		return false;
+	}
+	
+	function selfIsHorizontal(){
+		return self.position == 'TOP' || self.position == 'BOTTOM';
+	}
+	
+	function selfIsVertical(){
+		return self.position == 'LEFT' || self.position == 'RIGHT';
+	}
+	
+	function sendToServer(type, direction){
+		socket.send(JSON.stringify({
+			type: type,
+			name: self.name,
+			direction: direction
+		}));
+	}
+	
+	function clearField(){
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
 	}
 	
 	function drawObjects(){
 		ball.draw();
 		for(var i = 0; i < players.length; i++){
-			players[i].draw();
+			players[i].draw();				
 		}	
-	}
+	}	
 </script>
 </html>

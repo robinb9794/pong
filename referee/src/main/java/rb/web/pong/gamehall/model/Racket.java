@@ -1,25 +1,51 @@
 package rb.web.pong.gamehall.model;
 
 public class Racket {
-	private String type;
-	private Position startPos;
-	private final int WIDTH = Rules.RACKET_WIDTH;
-	private final int HEIGHT = Rules.RACKET_HEIGHT;
+	private Coordinate coordinate;
+	private int width = Rules.RACKET_WIDTH;
+	private int height = Rules.RACKET_HEIGHT;
 	
-	public Racket(String type, Position startPos) {
-		this.type = type;
-		this.startPos = startPos;
+	public Racket(Coordinate coordinate) {
+		this.coordinate = coordinate;
 	}
 	
-	public Position getStartPos() {
-		return this.startPos;
+	public synchronized Coordinate getCoordinate() {
+		return this.coordinate;
 	}
 	
-	public int getWidth() {
-		return this.WIDTH;
+	public synchronized void setCoordinate(Coordinate coordinate) {
+		this.coordinate = coordinate;
 	}
 	
-	public int getHeight() {
-		return this.HEIGHT;
+	public int getX() {
+		return this.coordinate.getX();
+	}
+	
+	public synchronized void setX(int x) {
+		this.coordinate.setX(x);
+	}
+	
+	public synchronized int getY() {
+		return this.coordinate.getY();
+	}
+	
+	public void setY(int y) {
+		this.coordinate.setY(y);
+	}
+	
+	public synchronized int getWidth() {
+		return this.width;
+	}
+	
+	public synchronized void setWidth(int width) {
+		this.width = width;
+	}
+	
+	public synchronized int getHeight() {
+		return this.height;
+	}
+	
+	public synchronized void setHeight(int height) {
+		this.height = height;
 	}
 }

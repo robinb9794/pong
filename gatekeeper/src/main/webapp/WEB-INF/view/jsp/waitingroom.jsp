@@ -90,7 +90,7 @@
 			var waitingPlayer = waitingPlayers[i];
 			lobbyMember.innerHTML += '<li>' + waitingPlayer.name + '</li>';
 		}		
-		lobbySize.innerHTML = 'Currently waiting players (' + waitingPlayers.length + '/4):';
+		lobbySize.innerHTML = 'Currently waiting players:';
 	}
 	
 	function updateCountdown(json){
