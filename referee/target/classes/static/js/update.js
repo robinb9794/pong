@@ -20,5 +20,11 @@ function updatePlayers(serverPlayers){
 		});
 		playerToUpdate.lifes = serverPlayers[i].lifes;
 		playerToUpdate.racket = serverPlayers[i].racket;	
+		updateTableRow(playerToUpdate);
 	}
+}
+
+function updateTableRow(playerToUpdate){
+	let tableRow = document.getElementById(playerToUpdate.name + '-life');
+	tableRow.innerHTML = playerToUpdate.lifes;
 }

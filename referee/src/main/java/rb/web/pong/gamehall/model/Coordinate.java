@@ -1,34 +1,34 @@
 package rb.web.pong.gamehall.model;
 
 public class Coordinate {
-	private int x, y;
+	private double x, y;
 	
 	public Coordinate() {
 		this(0, 0);
 	}
 	
-	public Coordinate(int x, int y) {
+	public Coordinate(double x, double y) {
 		this.x = x;
 		this.y = y;
 	}
 
-	public synchronized int getX() {
+	public synchronized double getX() {
 		return x;
 	}
 
-	public synchronized void setX(int x) {
+	public synchronized void setX(double x) {
 		this.x = x;
 	}
 
-	public synchronized int getY() {
+	public synchronized double getY() {
 		return y;
 	}
 
-	public synchronized void setY(int y) {
+	public synchronized void setY(double y) {
 		this.y = y;
 	}
 	
-	public synchronized void setPosition(int x, int y) {
+	public synchronized void setPosition(double x, double y) {
 		this.x = x;
 		this.y = y;
 	}

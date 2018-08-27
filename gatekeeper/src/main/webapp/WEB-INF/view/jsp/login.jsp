@@ -29,7 +29,7 @@
 				</select>
 			</div>
 			<hr/>
-			<strong><a href="/pong/stats/xml">Stats</a></strong>
+			<strong><a href="http://localhost:8082/pong/stats/get/xml">Stats</a></strong>
 			<button type="submit" onclick="checkForm()">GO!</button>				
 		</div>
 	</body>

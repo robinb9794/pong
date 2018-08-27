@@ -4,8 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import rb.web.pong.gamehall.hall.Hall;
-import rb.web.pong.gamehall.model.Player;
-import rb.web.pong.gamehall.model.Recorder;
+import rb.web.pong.gamehall.model.player.Player;
 
 abstract class MessageHandler extends Hall{
 	abstract void handleMessage(JSONObject receivedJson, Player playerOfSentMessage);
@@ -24,7 +23,7 @@ abstract class MessageHandler extends Hall{
     	coordinateObj.put("x", ball.getX());
     	coordinateObj.put("y", ball.getY());
     	ballObj.put("coordinate", coordinateObj);
-    	ballObj.put("size", ball.getSize());
+    	ballObj.put("radius", ball.getRadius());
     	return ballObj;
     }
     

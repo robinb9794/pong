@@ -11,12 +11,14 @@ import javax.websocket.Session;
 
 import org.json.JSONObject;
 
+import rb.web.pong.gamehall.hall.handler.BallHandler;
+import rb.web.pong.gamehall.hall.handler.PlayerHandler;
 import rb.web.pong.gamehall.hall.handler.message.InitMessageHandler;
 import rb.web.pong.gamehall.hall.handler.message.UpdateMessageHandler;
 import rb.web.pong.gamehall.model.Ball;
 import rb.web.pong.gamehall.model.MessageType;
-import rb.web.pong.gamehall.model.Player;
 import rb.web.pong.gamehall.model.Recorder;
+import rb.web.pong.gamehall.model.player.Player;
 
 public class Hall extends Endpoint {
 	protected static Set<Player> players = new HashSet<Player>();
@@ -24,9 +26,11 @@ public class Hall extends Endpoint {
 	protected static int registeredPlayers = -1;
 	protected static int initializedPlayers = 0;
 	protected static int hallId = -1;
+	protected static boolean gameIsRunning;
 	
 	protected static InitMessageHandler initHandler;
 	protected static UpdateMessageHandler updateHandler;
+	protected static BallHandler ballHandler;
 	
 	@Override
 	public synchronized void onOpen(Session session, EndpointConfig config) {
@@ -35,6 +39,7 @@ public class Hall extends Endpoint {
 			hallId = getHallIdFromSession(session);
 			initHandler = new InitMessageHandler();
 			updateHandler = new UpdateMessageHandler();
+			ballHandler = new BallHandler();
 		}		
 		players.add(new Player(session));
 		addMessageHandler(session);
@@ -51,7 +56,7 @@ public class Hall extends Endpoint {
 	private synchronized void addMessageHandler(Session session) {
 		session.addMessageHandler(new MessageHandler.Whole<String>(){
 			@Override
-			public void onMessage(String message) {
+			public synchronized void onMessage(String message) {
 				try {
 					handleReceivedMessage(message, session);
 				}catch(Exception e) {
@@ -62,20 +67,10 @@ public class Hall extends Endpoint {
 	}
 
     private synchronized void handleReceivedMessage(String message, Session session) {
-		Recorder.LOG.debug(hallId + " ; RECEIVED MESSAGE FROM CLIENT: " + message);
-		Player playerOfSentMessage = getPlayerBySession(session);
+		Player playerOfSentMessage = PlayerHandler.getPlayerBySession(session);
 		JSONObject receivedJson = new JSONObject(message);
 		handleReceivedMessage(receivedJson, playerOfSentMessage);
-	}
-    
-    private synchronized Player getPlayerBySession(Session session) {
-		for(Player p : players) {
-			if(p.getSession().getId().equals(session.getId())) {
-				return p;
-			}
-		}
-		return null;
-	}
+	} 
     
     @SuppressWarnings("incomplete-switch")
 	private synchronized void handleReceivedMessage(JSONObject receivedJson, Player playerOfSentMessage) {

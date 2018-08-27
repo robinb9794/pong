@@ -8,7 +8,7 @@ function initSocket(name){
 	}
 	
 	socket.onmessage = function(serverMessage){
-		var json = JSON.parse(serverMessage.data);
+		let json = JSON.parse(serverMessage.data);
 		console.log(json);
 		handleServerMessage(json);
 	}
@@ -29,8 +29,13 @@ function handleInitMessage(json){
 }
 
 function initField(serverField){
-	canvas.width = serverField.width;
-	canvas.height = serverField.height;
+	let width = serverField.width;
+	let height = serverField.height;
+	let spaceHorizontal = serverField.spaceHorizontal;
+	let spaceVertical = serverField.spaceVertical;
+	field = new Field(width, height, spaceHorizontal, spaceVertical);
+	canvas.width = field.width;
+	canvas.height = field.height;
 	ctx = canvas.getContext('2d');		
 	ctx.fillStyle = '#FFF';
 }
@@ -39,12 +44,12 @@ function initBall(serverBall){
 	let x = serverBall.coordinate.x;
 	let y = serverBall.coordinate.y;
 	let coordinate = new Coordinate(x, y);
-	let size = serverBall.size;
-	ball = new Ball(coordinate, size);
+	let radius = serverBall.radius;
+	ball = new Ball(coordinate, radius);
 }
 
 function initPlayers(serverPlayers){
-	for(var i = 0; i < serverPlayers.length; i++){	
+	for(let i = 0; i < serverPlayers.length; i++){	
 		let player = initNewPlayer(serverPlayers[i]);
 		if(player.name == self.name)
 			self = player;
@@ -74,11 +79,10 @@ function initNewPlayer(player){
 function initTableRow(player){
 	let tableBody = document.getElementById('table-body');
 	let html = '';
-	html += '<tr>';
-	html += '	<td' + (player.name == self.name ? ' style="background-color: #999;"' : '') + '>' + player.name + '</td>';	
-	html += '	<td>' + player.lifes + '</td>';
+	html += '<tr' + (player.name == self.name ? ' style="background-color: #747474;"' : '') + '>';
+	html += '	<td>' + player.name + '</td>';	
+	html += '	<td id="' + player.name + '-life">' + player.lifes + '</td>';
 	html += '	<td>' + player.position + '</td>';
 	html += '</tr>';
 	tableBody.innerHTML += html;
-	tableBody.style.width = canvas.width;
 }

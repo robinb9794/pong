@@ -28,10 +28,12 @@
 <script src="/js/init.js" type="text/javascript"></script>
 <script src="/js/countdown.js" type="text/javascript"></script>
 <script src="/js/update.js" type="text/javascript"></script>
+<script src="/js/reset.js" type="text/javascript"></script>
 <script type="text/javascript">
 	var socket;
 	var canvas;
 	var ctx;
+	var field = {};
 	var self = {};
 	var ball;
 	var players = [];
@@ -79,6 +81,9 @@
 			break;
 		case 'UPDATE':
 			handleUpdateMessage(json);
+			break;
+		case 'RESET':
+			handleResetMessage(json);
 			break;
 		}
 	}

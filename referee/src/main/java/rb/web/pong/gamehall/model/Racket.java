@@ -2,8 +2,8 @@ package rb.web.pong.gamehall.model;
 
 public class Racket {
 	private Coordinate coordinate;
-	private int width = Rules.RACKET_WIDTH;
-	private int height = Rules.RACKET_HEIGHT;
+	private int width = GameRules.RACKET_WIDTH;
+	private int height = GameRules.RACKET_HEIGHT;
 	
 	public Racket(Coordinate coordinate) {
 		this.coordinate = coordinate;
@@ -17,19 +17,19 @@ public class Racket {
 		this.coordinate = coordinate;
 	}
 	
-	public int getX() {
+	public double getX() {
 		return this.coordinate.getX();
 	}
 	
-	public synchronized void setX(int x) {
+	public synchronized void setX(double x) {
 		this.coordinate.setX(x);
 	}
 	
-	public synchronized int getY() {
+	public synchronized double getY() {
 		return this.coordinate.getY();
 	}
 	
-	public void setY(int y) {
+	public void setY(double y) {
 		this.coordinate.setY(y);
 	}
 	
