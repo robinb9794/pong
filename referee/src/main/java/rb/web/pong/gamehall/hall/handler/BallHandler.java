@@ -2,6 +2,8 @@ package rb.web.pong.gamehall.hall.handler;
 
 import rb.web.pong.gamehall.hall.Hall;
 import rb.web.pong.gamehall.hall.Referee;
+import rb.web.pong.gamehall.hall.coordinator.CollisionCoordinator;
+import rb.web.pong.gamehall.hall.coordinator.FieldCoordinator;
 import rb.web.pong.gamehall.model.GameRules;
 import rb.web.pong.gamehall.model.Racket;
 import rb.web.pong.gamehall.model.Recorder;
@@ -23,7 +25,7 @@ public class BallHandler extends Hall {
 
 	public static synchronized void startInRandomDirection() {
 		double x = 0, y = 0;
-		while (y == 0 && players.size() == 2) {
+		while (x == 0 && players.size() == 2 || (x == 0 && y == 0)) {
 			x = VectorHandler.getRandomValue(-GameRules.BALL_SPEED, GameRules.BALL_SPEED);
 			y = VectorHandler.getSecondVectorValue(x, Math.random() > 0.5);
 		}
@@ -97,25 +99,25 @@ public class BallHandler extends Hall {
 		switch (player.getPosition()) {
 		case TOP:
 			if (CollisionCoordinator.ballIsHittingTopRacket(racket)) {
-				VectorHandler.calculateollision(player);
+				VectorHandler.calculateCollision(player);
 				return true;
 			}
 			break;
 		case RIGHT:
 			if (CollisionCoordinator.ballIsHittingRightRacket(racket)) {
-				VectorHandler.calculateollision(player);
+				VectorHandler.calculateCollision(player);
 				return true;
 			}
 			break;
 		case BOTTOM:
 			if (CollisionCoordinator.ballIsHittingBottomRacket(racket)) {
-				VectorHandler.calculateollision(player);
+				VectorHandler.calculateCollision(player);
 				return true;
 			}
 			break;
 		case LEFT:
 			if (CollisionCoordinator.ballIsHittingLeftRacket(racket)) {
-				VectorHandler.calculateollision(player);
+				VectorHandler.calculateCollision(player);
 				return true;
 			}
 			break;
@@ -124,7 +126,7 @@ public class BallHandler extends Hall {
 	}
 
 	private static synchronized void incrSpeed() {
-		if (GameRules.SERVER_TICK > 0)
+		if (GameRules.SERVER_TICK > 2)
 			GameRules.SERVER_TICK -= 1;
 		Recorder.LOG.debug(hallId + " ; BALL TICKER IS NOW: " + GameRules.SERVER_TICK);
 	}

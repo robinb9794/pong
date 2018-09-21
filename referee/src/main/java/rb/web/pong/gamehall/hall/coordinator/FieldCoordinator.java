@@ -1,4 +1,4 @@
-package rb.web.pong.gamehall.hall.handler;
+package rb.web.pong.gamehall.hall.coordinator;
 
 import rb.web.pong.gamehall.model.GameRules;
 

@@ -18,7 +18,6 @@ rb/web/pong/gamehall/hall/handler/BallHandler$1.class
 rb/web/pong/gamehall/hall/handler/message/ResetMessageHandler.class
 rb/web/pong/gamehall/hall/handler/message/UpdateMessageHandler.class
 rb/web/pong/gamehall/hall/handler/CollisionCoordinator.class
-rb/web/pong/gamehall/model/Player.class
 rb/web/pong/gamehall/model/MessageType.class
 rb/web/pong/gamehall/hall/handler/message/InitMessageHandler.class
 rb/web/pong/App.class

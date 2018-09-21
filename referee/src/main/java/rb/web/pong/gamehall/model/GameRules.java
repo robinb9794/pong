@@ -1,10 +1,10 @@
 package rb.web.pong.gamehall.model;
 
 public class GameRules {
-	public static final int FIELD_WIDTH = 600;
+	public static final int FIELD_WIDTH = 800;
 	public static final int FIELD_HEIGHT = 600;
 	
-	public static final int INIT_LIFES = 1;
+	public static final int INIT_LIFES = 2;
 	
 	public static final int RACKET_WIDTH = 150;
 	public static final int RACKET_HEIGHT = 10;

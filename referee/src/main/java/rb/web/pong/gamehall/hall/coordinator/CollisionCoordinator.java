@@ -1,6 +1,7 @@
-package rb.web.pong.gamehall.hall.handler;
+package rb.web.pong.gamehall.hall.coordinator;
 
 import rb.web.pong.gamehall.hall.Hall;
+import rb.web.pong.gamehall.hall.handler.VectorHandler;
 import rb.web.pong.gamehall.model.GameRules;
 import rb.web.pong.gamehall.model.Racket;
 import rb.web.pong.gamehall.model.player.Player;

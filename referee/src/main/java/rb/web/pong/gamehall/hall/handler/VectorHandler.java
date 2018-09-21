@@ -1,6 +1,9 @@
 package rb.web.pong.gamehall.hall.handler;
 
 import java.util.concurrent.ThreadLocalRandom;
+
+import rb.web.pong.gamehall.hall.coordinator.CollisionCoordinator;
+import rb.web.pong.gamehall.hall.coordinator.PositionCoordinator;
 import rb.web.pong.gamehall.model.GameRules;
 import rb.web.pong.gamehall.model.Position;
 import rb.web.pong.gamehall.model.Recorder;
@@ -26,7 +29,7 @@ public class VectorHandler extends BallHandler{
 		return (double) tmp / factor;
 	}
 	
-	public synchronized static void calculateollision(Player player) {	
+	public synchronized static void calculateCollision(Player player) {	
 		Recorder.LOG.info(hallId + " ; COLLISION WITH RACKET: " + player.getPosition().toString());
 		double vectorX = v.getX();
 		double vectorY = v.getY();

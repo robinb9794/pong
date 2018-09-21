@@ -8,6 +8,7 @@ import java.util.Iterator;
 import javax.websocket.Session;
 
 import rb.web.pong.gamehall.hall.Hall;
+import rb.web.pong.gamehall.hall.coordinator.PositionCoordinator;
 import rb.web.pong.gamehall.model.GameRules;
 
 public class PlayerHandler extends Hall{
@@ -128,9 +129,9 @@ public class PlayerHandler extends Hall{
 		int i = 0;
 		for(Player player: players) {
 			if(i == 0) 
-				PositionCoordinator.getAndSetTopStartPos(player);				
+				PositionCoordinator.getAndSetLeftStartPos(player);				
 			else
-				PositionCoordinator.getAndSetBottomStartPos(player);
+				PositionCoordinator.getAndSetRightStartPos(player);
 			++i;
 		}
 	}

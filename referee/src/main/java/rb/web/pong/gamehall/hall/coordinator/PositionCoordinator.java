@@ -1,4 +1,4 @@
-package rb.web.pong.gamehall.hall.handler;
+package rb.web.pong.gamehall.hall.coordinator;
 
 import rb.web.pong.gamehall.hall.Hall;
 import rb.web.pong.gamehall.model.Coordinate;
@@ -14,16 +14,16 @@ public class PositionCoordinator extends Hall{
 		Coordinate startPos = new Coordinate();
 		switch(positionCounter++) {
 		case 1:
-			startPos = getAndSetBottomStartPos(player);
+			startPos = getAndSetLeftStartPos(player);
 			break;
 		case 2:
-			startPos = getAndSetTopStartPos(player);				
+			startPos = getAndSetRightStartPos(player);				
 			break;
 		case 3:
-			startPos = getAndSetLeftStartPos(player);				
+			startPos = getAndSetBottomStartPos(player);				
 			break;
 		case 4:
-			startPos = getAndSetRightStartPos(player);
+			startPos = getAndSetTopStartPos(player);
 			break;
 				
 		}		

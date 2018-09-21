@@ -6,8 +6,8 @@ import java.util.Random;
 import org.json.JSONObject;
 
 import rb.web.pong.gamehall.model.Position;
+import rb.web.pong.gamehall.hall.coordinator.PositionCoordinator;
 import rb.web.pong.gamehall.hall.handler.PlayerHandler;
-import rb.web.pong.gamehall.hall.handler.PositionCoordinator;
 import rb.web.pong.gamehall.model.Coordinate;
 import rb.web.pong.gamehall.model.MessageType;
 import rb.web.pong.gamehall.model.Racket;
