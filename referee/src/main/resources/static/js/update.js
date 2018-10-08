@@ -20,7 +20,7 @@ function updatePlayers(serverPlayers){
 		});
 		playerToUpdate.lifes = serverPlayers[i].lifes;
 		if(playerToUpdate.lifes == 0){
-			let playerIndex = players.indexOf([playerToUpdate);
+			let playerIndex = players.indexOf(playerToUpdate);
 			players.splice(playerIndex, 1);
 		}			
 		playerToUpdate.racket = serverPlayers[i].racket;	
