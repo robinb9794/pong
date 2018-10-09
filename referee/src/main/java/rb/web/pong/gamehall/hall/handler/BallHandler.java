@@ -60,20 +60,6 @@ public class BallHandler extends Hall {
 	}
 
 	private static synchronized void checkForCollisionWithWall(int currentArea) {
-		/*
-		 * if(CollisionCoordinator.ballIsHittingTopRightCorner()) {
-		 * Recorder.LOG.info(hallId + " ; COLLISION WITH CORNER: TOP RIGHT");
-		 * VectorHandler.setOppositeDirection(); }else
-		 * if(CollisionCoordinator.ballIsHittingBottomRightCorner()){
-		 * Recorder.LOG.info(hallId + " ; COLLISION WITH CORNER: BOTTOM RIGHT");
-		 * VectorHandler.setOppositeDirection(); }else
-		 * if(CollisionCoordinator.ballIsHittingBottomLeftCorner()){
-		 * Recorder.LOG.info(hallId + " ; COLLISION WITH CORNER: BOTTOM LEFT");
-		 * VectorHandler.setOppositeDirection(); }else
-		 * if(CollisionCoordinator.ballIsHittingTopLeftCorner()){
-		 * Recorder.LOG.info(hallId + " ; COLLISION WITH CORNER: TOP LEFT");
-		 * VectorHandler.setOppositeDirection(); }
-		 */
 		if (CollisionCoordinator.ballIsHittingTopWall()) {
 			Recorder.LOG.info(hallId + " ; COLLISION WITH WALL: TOP");
 			if (!Referee.playerHasLostLife("TOP"))
