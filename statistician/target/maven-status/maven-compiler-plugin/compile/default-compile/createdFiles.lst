@@ -1,5 +1,5 @@
 rb/web/pong/statistician/StatsService.class
 rb/web/pong/statistician/model/Player.class
-rb/web/pong/statistician/App.class
 rb/web/pong/statistician/model/Recorder.class
+rb/web/pong/statistician/StatisticianApplication.class
 rb/web/pong/statistician/controller/StatisticianController.class
